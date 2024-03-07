@@ -1,39 +1,38 @@
 import {useState} from "react";
 
 export const TaskManager = () => {
-    const [tasks, setTasks] = useState([])
-    const [count, setCount] = useState(0)
+    const [tasks, setTasks] = useState([]);
+    const [count, setCount] = useState(0);
     const addTask = () => {
-        console.log(count)
         const newTask = {
             id: count,
-            title: `task${count}`,
+            title: `Task${count}`,
             completed: false
         }
-        setTasks([...tasks, newTask])
-        setCount(n => n + 1)
+        setTasks([...tasks, newTask]);
+        setCount(count => count + 1);
     }
-    const toggleTask = (e, id) => {
-        e.stopPropagation()
-        console.log(id)
-        const updated = tasks.map(t => {
-            if (t.id === id)
+    const toggleTask = (id) => {
+        const updated = tasks.map(task => {
+            if (task.id === id)
                 return {
-                ...t,
-                    completed: !t.completed
-                }
-            return tasks
-        })
+                    ...task,
+                    completed: !task.completed
+                };
+            return task;
+        });
         setTasks(updated)
     }
     return (
         <>
-            <button onClick={addTask}>add task</button>
-            <div>{tasks.map(task => {return <div>
-                    <li>{task.title} {task.completed ? "true" : "false"}</li>
-                    <button onClick={(e) => toggleTask(e, task.id)}>Toggle {task.id}</button>
+            <button style={{marginBottom: "1em"}} onClick={addTask}>add task</button>
+            {tasks.map(task => {
+                return <div key={task.id}>
+                    <button onClick={() => toggleTask(task.id)}>
+                        {task.title} {task.completed ? "completed" : "incomplete"}
+                    </button>
                 </div>
-            })}</div>
+            })}
         </>
     )
 }
